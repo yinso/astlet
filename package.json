@@ -1,0 +1,30 @@
+{
+  "author": "YC <yinso.chen@gmail.com>",
+  "name": "astlet",
+  "description": "An extensible abstract syntax tree library",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git://bitbucket.org/yinso/astlet.git"
+  },
+  "main": "./lib/",
+  "engines": {
+    "node": ">= 0.8.4"
+  },
+  "scripts": {
+    "prepublish": "make",
+    "test": "mocha --compilers coffee:coffee-script/register --recursive"
+  },
+  "license": "BSD-3-Clause",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "coffee-script": "=1.8.0",
+    "mocha": "^2.4.5"
+  },
+  "keywords": [
+    "ast",
+    "abstract syntax tree",
+    "compiler"
+  ]
+}

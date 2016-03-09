@@ -15,43 +15,43 @@ class Loader
   key: (obj) ->
     '_' + obj.type
   _integer: (obj) ->
-    AST.Integer obj.value
+    AST.IntegerExp obj.value
   _float: (obj) ->
-    AST.Float obj.value
+    AST.FloatExp obj.value
   _boolean: (obj) ->
-    AST.Boolean obj.value
+    AST.BoolExp obj.value
   _string: (obj) ->
-    AST.String obj.value
+    AST.StringExp obj.value
   _date: (obj) ->
-    AST.Date obj.value
+    AST.DateExp obj.value
   _null: (obj) ->
-    AST.Null()
+    AST.NullExp()
   _undefined: (obj) ->
-    AST.Undefined()
+    AST.UndefinedExp()
   _symbol: (obj) ->
-    AST.Symbol obj.value
+    AST.SymbolExp obj.value
   _regex: (obj) ->
     AST.RegExp obj.value
   _parameter: (obj) ->
     name =
       if typeof(obj.name) == 'string'
-        AST.Symbol obj.name
+        AST.SymbolExp obj.name
       else
         @load obj.name
-    AST.Parameter name
+    AST.ParameterExp name
   _array: (obj) ->
     items =
       for item in obj.items
         @load item
-    AST.Array items
+    AST.ArrayExp items
   _object: (obj) ->
     keyvals =
       for key, val of obj.properties
         [
-          AST.Symbol(key)
+          AST.SymbolExp(key)
           @load val
         ]
-    AST.Record keyvals
+    AST.ObjectExp keyvals
   _member: (obj) ->
     head = @load obj.head
     key = @load obj.key
@@ -102,6 +102,10 @@ class Loader
     AST.AssignExp name, value
 
 AST.Loader = Loader
+
+AST.load = (obj) ->
+  loader = Loader()
+  loader.load obj
 
 module.exports = Loader
 

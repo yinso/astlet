@@ -10,47 +10,47 @@ describe 'loader test', ->
     ast = loader.load
       type: 'integer'
       value: 1
-    assert.ok ast instanceof AST.Integer
+    assert.ok ast instanceof AST.IntegerExp
 
   it 'can load float', ->
     ast = loader.load
       type: 'float'
       value: 1.5
-    assert.ok ast instanceof AST.Float
+    assert.ok ast instanceof AST.FloatExp
 
   it 'can load bool', ->
     ast = loader.load
       type: 'boolean'
       value: true
-    assert.ok ast instanceof AST.Boolean
+    assert.ok ast instanceof AST.BoolExp
 
   it 'can load string', ->
     ast = loader.load
       type: 'string'
       value: 'this is a string'
-    assert.ok ast instanceof AST.String
+    assert.ok ast instanceof AST.StringExp
 
   it 'can load date', ->
     ast = loader.load
       type: 'date'
       value: new Date()
-    assert.ok ast instanceof AST.Date
+    assert.ok ast instanceof AST.DateExp
   
   it 'can load null', ->
     ast = loader.load
       type: 'null'
-    assert.ok ast instanceof AST.Null
+    assert.ok ast instanceof AST.NullExp
 
   it 'can load undefined', ->
     ast = loader.load
       type: 'undefined'
-    assert.ok ast instanceof AST.Undefined
+    assert.ok ast instanceof AST.UndefinedExp
 
   it 'can load symbol', ->
     ast = loader.load
       type: 'symbol'
       value: 'foo'
-    assert.ok ast instanceof AST.Symbol
+    assert.ok ast instanceof AST.SymbolExp
 
   it 'can load regex', ->
     ast = loader.load
@@ -63,7 +63,7 @@ describe 'loader test', ->
     ast = loader.load
       type: 'parameter'
       name: 'foo'
-    assert.ok ast instanceof AST.Parameter
+    assert.ok ast instanceof AST.ParameterExp
 
   it 'can load array', ->
     ast = loader.load
@@ -78,7 +78,7 @@ describe 'loader test', ->
           value: 10
         }
       ]
-    assert.ok ast instanceof AST.Array
+    assert.ok ast instanceof AST.ArrayExp
 
 
   it 'can load object', ->
@@ -100,7 +100,7 @@ describe 'loader test', ->
             pattern:
               type: 'regex'
               value: /\d+/
-    assert.ok ast instanceof AST.Record
+    assert.ok ast instanceof AST.ObjectExp
 
   it 'can load member', ->
     ast = loader.load

@@ -1,78 +1,78 @@
 
 class AST
 
-AST.Integer = class Integer extends AST
+AST.IntegerExp = class IntegerExp extends AST
   constructor: (value) ->
-    if not (@ instanceof Integer)
-      return new Integer(value)
+    if not (@ instanceof IntegerExp)
+      return new IntegerExp(value)
     if typeof(value) == 'number'
       if Math.floor(value) == value
         Object.defineProperty @, 'value',
           value: value
       else
-        throw new Error("AST.Integer:invalidValue: #{value}")
+        throw new Error("AST.IntegerExp:invalidValue: #{value}")
     else
-        throw new Error("AST.Integer:invalidValue: #{value}")
+        throw new Error("AST.IntegerExp:invalidValue: #{value}")
 
-AST.Float = class Float extends AST
+AST.FloatExp = class FloatExp extends AST
   constructor: (value) ->
-    if not (@ instanceof Float)
-      return new Float(value)
+    if not (@ instanceof FloatExp)
+      return new FloatExp(value)
     if typeof(value) == 'number'
       Object.defineProperty @, 'value',
         value: value
     else
-      throw new Error("AST.Float:invalidValue: #{value}")
+      throw new Error("AST.FloatExp:invalidValue: #{value}")
 
-AST.Boolean = class Boolean extends AST
+AST.BoolExp = class BoolExp extends AST
   constructor: (value) ->
-    if not (@ instanceof Boolean)
-      return new Boolean(value)
+    if not (@ instanceof BoolExp)
+      return new BoolExp(value)
     if typeof(value) == 'boolean'
       Object.defineProperty @, 'value',
         value: value
     else
-      throw new Error("AST.Boolean:invalidValue: #{value}")
+      throw new Error("AST.BoolExp:invalidValue: #{value}")
 
-AST.String = class String extends AST
+AST.StringExp = class StringExp extends AST
   constructor: (value) ->
-    if not (@ instanceof String)
-      return new String(value)
+    if not (@ instanceof StringExp)
+      return new StringExp(value)
     if typeof(value) == 'string'
       Object.defineProperty @, 'value',
         value: value
     else
-      throw new Error("AST.String:invalidValue: #{value}")
+      throw new Error("AST.StringExp:invalidValue: #{value}")
 
-AST.Date = class ASTDate extends AST
+AST.DateExp = class DateExp extends AST
   constructor: (value) ->
-    if not (@ instanceof ASTDate)
-      return new ASTDate value
-    if value instanceof Date
+    if not (@ instanceof DateExp)
+      return new DateExp value
+    if value instanceof Date 
       Object.defineProperty @, 'value',
         value: value
     else
-      throw new Error("AST.Date:invalidValue: #{value}")
+      throw new Error("AST.DateExp:invalidValue: #{value}")
 
-AST.Null = class Null extends AST
+AST.NullExp = class NullExp extends AST
   constructor: () ->
-    if not (@ instanceof Null)
-      return new Null()
+    if not (@ instanceof NullExp)
+      return new NullExp()
 
-AST.Undefined = class Undefined extends AST
+AST.UndefinedExp = class UndefinedExp extends AST
   constructor: () ->
-    if not (@ instanceof Undefined)
-      return new Undefined()
+    if not (@ instanceof UndefinedExp)
+      return new UndefinedExp()
 
-AST.Symbol = class Symbol extends AST
+AST.SymbolExp = class SymbolExp extends AST
   constructor: (value) ->
-    if not (@ instanceof Symbol)
-      return new Symbol value
+    if not (@ instanceof SymbolExp)
+      return new SymbolExp value
     if typeof(value) == 'string'
       Object.defineProperty @, 'value',
         value: value
     else
-      throw new Error("AST.Symbol:invaidValue: #{value}")
+      throw new Error("AST.SymbolExp:invaidValue: #{value}")
 
 AST.RegExp = class ASTRegExp extends AST
   constructor: (value) ->
@@ -83,40 +83,40 @@ AST.RegExp = class ASTRegExp extends AST
     Object.defineProperty @, 'value',
       value: value
 
-AST.Parameter = class Parameter extends AST
+AST.ParameterExp = class ParameterExp extends AST
   constructor: (name) ->
-    if not (@ instanceof Parameter)
-      return new Parameter name
-    if not (name instanceof Symbol)
-      throw new Error("AST.Parameter:invalidName: #{name}")
+    if not (@ instanceof ParameterExp)
+      return new ParameterExp name
+    if not (name instanceof SymbolExp)
+      throw new Error("AST.ParameterExp:invalidName: #{name}")
     Object.defineProperty @, 'name',
       value: name
 
-AST.Array = class ASTArray extends AST
+AST.ArrayExp = class ArrayExp extends AST
   constructor: (items) ->
-    if not (@ instanceof ASTArray)
-      return new ASTArray items
+    if not (@ instanceof ArrayExp)
+      return new ArrayExp items
     if not (items instanceof Array)
-      throw new Error("AST.Array:invalidItems:notArray: #{items}")
+      throw new Error("AST.ArrayExp:invalidItems:notArrayExp: #{items}")
     for item, i in items
       if not (item instanceof AST)
-        throw new Error("AST.Array:invalidItem:[#{i}]: #{item}")
+        throw new Error("AST.ArrayExp:invalidItem:[#{i}]: #{item}")
     Object.defineProperty @, 'items',
       value: items
 
-AST.Record = class Record extends AST
+AST.ObjectExp = class ObjectExp extends AST
   constructor: (keyvals) ->
-    if not (@ instanceof Record)
-      return new Record keyvals
+    if not (@ instanceof ObjectExp)
+      return new ObjectExp keyvals
     if not (keyvals instanceof Array)
-      throw new Error("AST.Record:invalidKeyVals:notArray: #{keyvals}")
+      throw new Error("AST.ObjectExp:invalidKeyVals:notArrayExp: #{keyvals}")
     for keyval, i in keyvals
       if not (keyval instanceof Array)
-        throw new Error("AST.Record:invalidKeyVal:[#{i}]: #{keyval}")
-      if not ((keyval[0] instanceof AST.String) or (keyval[0] instanceof AST.Symbol))
-        throw new Error("AST.Record:invalidKey:[#{i}]: #{keyval[0]}")
+        throw new Error("AST.ObjectExp:invalidKeyVal:[#{i}]: #{keyval}")
+      if not ((keyval[0] instanceof AST.StringExp) or (keyval[0] instanceof AST.SymbolExp))
+        throw new Error("AST.ObjectExp:invalidKey:[#{i}]: #{keyval[0]}")
       if not (keyval[1] instanceof AST)
-        throw new Error("AST.Record:invalidValue:[#{i}]: #{keyval[1]}")
+        throw new Error("AST.ObjectExp:invalidValue:[#{i}]: #{keyval[1]}")
     Object.defineProperty @, 'keyvals',
       value: keyvals
 
@@ -126,7 +126,7 @@ AST.MemberExp = class MemberExp extends AST
       return new MemberExp head, key
     if not (head instanceof AST)
       throw new Error("AST.MemberExp:invalidHead: #{head}")
-    if not (key instanceof AST.Symbol)
+    if not (key instanceof AST.SymbolExp)
       throw new Error("AST.MemberExp:invalidKey: #{key}")
     Object.defineProperties @,
       head:
@@ -138,7 +138,7 @@ AST.UnaryExp = class UnaryExp extends AST
   constructor: (op, rhs) ->
     if not (@ instanceof UnaryExp)
       return new UnaryExp op, rhs
-    if not (op instanceof Symbol)
+    if not (op instanceof SymbolExp)
       throw new Error("AST.UnaryExp:invalidOperator: #{op}")
     if not (rhs instanceof AST)
       throw new Error("AST.UnaryExp:invalidRightHandSide: #{rhs}")
@@ -152,7 +152,7 @@ AST.BinaryExp = class BinaryExp extends AST
   constructor: (op, lhs, rhs) ->
     if not (@ instanceof BinaryExp)
       return new BinaryExp op, lhs, rhs
-    if not (op instanceof Symbol)
+    if not (op instanceof SymbolExp)
       throw new Error("AST.BinaryExp:invalidOperator: #{op}")
     if not (lhs instanceof AST)
       throw new Error("AST.BinaryExp:invalidLefttHandSide: #{lhs}")
@@ -189,7 +189,7 @@ AST.BlockExp = class BlockExp extends AST
     if not (@ instanceof BlockExp)
       return new BlockExp body
     if not (body instanceof Array)
-      throw new Error("AST.Block:invalidBody:notArray: #{body}")
+      throw new Error("AST.Block:invalidBody:notArrayExp: #{body}")
     for exp, i in body
       if not (exp instanceof AST)
         throw new Error("AST.Block:invalidExpression:[#{i}]: #{exp}")
@@ -203,7 +203,7 @@ AST.ProcedureCallExp = class ProcedureCallExp extends AST
     if not (proc instanceof AST)
       throw new Error("AST.ProcedureCallExp:invalidProcedure: #{proc}")
     if not (args instanceof Array)
-      throw new Error("AST.ProcedureCallExp:invalidArgs:notArray: #{args}")
+      throw new Error("AST.ProcedureCallExp:invalidArgs:notArrayExp: #{args}")
     for arg, i in args
       if not (arg instanceof AST)
         throw new Error("AST.ProcedureCallExp:invalidArg:[#{i}]: #{arg}")
@@ -221,13 +221,13 @@ AST.ProcedureExp = class ProcedureExp extends AST
       body = args
       args = name
       name = null
-    if not ((name == null) or (name instanceof AST.Symbol))
+    if not ((name == null) or (name instanceof AST.SymbolExp))
       throw new Error("AST.Procedure:invalidName: #{name}")
     if not (args instanceof Array)
-      throw new Error("AST.Procedure:invalidArgs:notArray: #{args}")
+      throw new Error("AST.Procedure:invalidArgs:notArrayExp: #{args}")
     for arg, i in args
-      if not (arg instanceof AST.Parameter)
-        throw new Error("AST.Procedure:invalidArg:notParameter:[#{i}]: #{arg}")
+      if not (arg instanceof AST.ParameterExp)
+        throw new Error("AST.Procedure:invalidArg:notParameterExp:[#{i}]: #{arg}")
     if not (body instanceof AST)
       throw new Error("AST.Procedure:invalidBody:notAST: #{body}")
     Object.defineProperties @,
@@ -242,7 +242,7 @@ AST.DefineExp = class DefineExp extends AST
   constructor: (name, value) ->
     if not (@ instanceof DefineExp)
       return new DefineExp name, value
-    if not (name instanceof AST.Symbol)
+    if not (name instanceof AST.SymbolExp)
       throw new Error("AST.DefineExp:invalidName: #{name}")
     if not (value instanceof AST)
       throw new Error("AST.DefineExp:invalidValue: #{value}")
@@ -256,7 +256,7 @@ AST.AssignExp = class AssignExp extends AST
   constructor: (name, value) ->
     if not (@ instanceof AssignExp)
       return new AssignExp name, value
-    if not (name instanceof AST.Symbol)
+    if not (name instanceof AST.SymbolExp)
       throw new Error("AST.AssignExp:invalidName: #{name}")
     if not (value instanceof AST)
       throw new Error("AST.AssignExp:invalidValue: #{value}")

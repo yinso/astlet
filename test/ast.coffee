@@ -5,18 +5,18 @@ describe 'AST test', ->
   describe 'AST integer test', ->
 
     it 'can create Integer', ->
-      v = AST.IntegerExp 10
+      v = AST.get('integer') 10
 
     it 'can catch float ', (done)->
       try
-        v = AST.IntegerExp 10.5
+        v = AST.get('integer') 10.5
         done new Error("AST.Integer.float_past_thru")
       catch e
         done null
-    
+
     it 'can catch non number', (done) ->
       try
-        v = AST.IntegerExp 'not a number'
+        v = AST.get('integer') 'not a number'
         done new Error("AST.Integer.string_past_thru")
       catch e
         done null
@@ -24,12 +24,12 @@ describe 'AST test', ->
   describe 'Float test', ->
 
     it 'can create float', ->
-      AST.FloatExp 10
-      AST.FloatExp 10.5
+      AST.get('float') 10
+      AST.get('float') 10.5
 
     it 'can catch non float', (done) ->
       try
-        AST.FloatExp 'not a number'
+        AST.get('float') 'not a number'
         done new Error("AST.Float:string_not_float")
       catch e
         done null
@@ -37,12 +37,12 @@ describe 'AST test', ->
   describe 'Boolean test', ->
 
     it 'can create boolean', ->
-      AST.BoolExp true
-      AST.BoolExp false
+      AST.get('boolean') true
+      AST.get('boolean') false
 
     it 'can catch non bool', (done) ->
       try
-        AST.BoolExp 1
+        AST.get('boolean') 1
         done new Error("AST.Boolean:not_boolean")
       catch e
         done null
@@ -50,22 +50,22 @@ describe 'AST test', ->
   describe 'String test', ->
 
     it 'can create string ast', ->
-      AST.StringExp 'this is a string'
-    
+      AST.get('string') 'this is a string'
+
     it 'can catch non string', (done) ->
       try
-        AST.StringExp true
-        done new Error("AST.String:not_a_string")
+        AST.get('string') true
+        done new Error("AST.get('string'):not_a_string")
       catch e
         done null
 
   describe 'Date test', ->
     it 'can create date ast', ->
-      AST.DateExp new Date()
+      AST.get('date') new Date()
 
     it 'can catch non date', (done) ->
       try
-        AST.DateExp 'this is not a date'
+        AST.get('date') 'this is not a date'
         done new Error("AST.Date:not_a_date")
       catch e
         done null
@@ -73,99 +73,97 @@ describe 'AST test', ->
   describe 'Null test', ->
 
     it 'can create null', ->
-      AST.NullExp()
+      AST.get('null')()
 
   describe 'Undefined test', ->
     it 'can create undefined', ->
-      AST.UndefinedExp()
+      AST.get('undefined')()
 
 
   describe 'Symbol test', ->
     it 'can create symbol', ->
-      AST.SymbolExp 'a-symbol'
+      AST.get('symbol') 'a-symbol'
 
     it 'can catch non symbol', (done) ->
       try
-        AST.SymbolExp 1
+        AST.get('symbol') 1
         done new Error("AST.Symbol:not_symbol")
       catch e
         done null
 
-  describe 'RegExp test', ->
-    it 'can create regexp', ->
-      AST.RegExp /this is a regexp/
+  describe 'Regex test', ->
+    it 'can create regex', ->
+      AST.get('regex') /this is a get('regex')/
 
   describe 'Parameter test', ->
     it 'can create parameter', ->
-      AST.ParameterExp AST.SymbolExp('foo')
+      AST.get('param') AST.get('symbol')('foo')
 
   describe 'Array test', ->
     it 'can create array', ->
-      AST.ArrayExp [
-        AST.IntegerExp(1)
-        AST.IntegerExp(2)
-        AST.IntegerExp(3)
+      AST.get('array') [
+        AST.get('integer')(1)
+        AST.get('integer')(2)
+        AST.get('integer')(3)
       ]
 
   describe 'Record test', ->
     it 'can create record (object)', ->
-      AST.ObjectExp [
+      AST.get('object') [
         [
-          AST.SymbolExp('foo')
-          AST.IntegerExp(1)
+          AST.get('symbol')('foo')
+          AST.get('integer')(1)
         ]
         [
-          AST.SymbolExp('bar')
-          AST.ArrayExp [
-            AST.StringExp('hello')
-            AST.StringExp('world')
+          AST.get('symbol')('bar')
+          AST.get('array') [
+            AST.get('string')('hello')
+            AST.get('string')('world')
           ]
         ]
       ]
 
   describe 'MemberExp test', ->
-    it 'can create memberExp', ->
-      AST.MemberExp AST.SymbolExp('test'), AST.SymbolExp('foo')
+    it 'can create MemberExp', ->
+      AST.get('member') AST.get('symbol')('test'), AST.get('symbol')('foo')
 
   describe 'UnaryExp test', ->
     it 'can create UnaryExp', ->
-      AST.UnaryExp AST.SymbolExp('!'), AST.BoolExp(true)
-    
+      AST.get('unary') AST.get('symbol')('!'), AST.get('boolean')(true)
+
   describe 'BinaryExp test', ->
     it 'can create BinaryExp', ->
-      AST.BinaryExp AST.SymbolExp('+'), AST.FloatExp(1), AST.FloatExp(2.5)
+      AST.get('binary') AST.get('symbol')('+'), AST.get('float')(1), AST.get('float')(2.5)
 
   describe 'IfExp test', ->
     it 'can create IfExp', ->
-      AST.IfExp AST.BoolExp(true), AST.IntegerExp(1), AST.IntegerExp(2)
+      AST.get('if') AST.get('boolean')(true), AST.get('integer')(1), AST.get('integer')(2)
 
   describe 'BlockExp test', ->
     it 'can create block', ->
-      AST.BlockExp [
-        AST.SymbolExp('foo')
-        AST.BinaryExp(AST.SymbolExp('+'), AST.IntegerExp(1), AST.IntegerExp(2))
-        AST.NullExp()
+      AST.get('block') [
+        AST.get('symbol')('foo')
+        AST.get('binary')(AST.get('symbol')('+'), AST.get('integer')(1), AST.get('integer')(2))
+        AST.get('null')()
       ]
 
   describe 'ProcedureExp test', ->
     it 'can create procedure', ->
-      AST.ProcedureExp AST.SymbolExp('add'),
+      AST.get('procedure') AST.get('symbol')('add'),
         [
-          AST.ParameterExp(AST.SymbolExp('a'))
-          AST.ParameterExp(AST.SymbolExp('b'))
+          AST.get('param')(AST.get('symbol')('a'))
+          AST.get('param')(AST.get('symbol')('b'))
         ]
-        AST.BinaryExp(AST.SymbolExp('+'), AST.SymbolExp('a'), AST.SymbolExp('b'))
+        AST.get('binary')(AST.get('symbol')('+'), AST.get('symbol')('a'), AST.get('symbol')('b'))
 
   describe 'DefineExp test', ->
     it 'can create DefineExp', ->
-      AST.DefineExp AST.SymbolExp('foo'), AST.IfExp(AST.BoolExp(true), AST.IntegerExp(1), AST.IntegerExp(2))
+      AST.get('define') AST.get('symbol')('foo'), AST.get('if')(AST.get('boolean')(true), AST.get('integer')(1), AST.get('integer')(2))
 
   describe 'AssignExp test', ->
-    it 'can create DefineExp', ->
-      AST.AssignExp AST.SymbolExp('foo'), AST.IfExp(AST.BoolExp(true), AST.IntegerExp(1), AST.IntegerExp(2))
+    it 'can create AssignExp', ->
+      AST.get('assign') AST.get('symbol')('foo'), AST.get('if')(AST.get('boolean')(true), AST.get('integer')(1), AST.get('integer')(2))
 
   describe 'ProcedureCallExp test', ->
     it 'can create procedureCall', ->
-      AST.ProcedureCallExp AST.SymbolExp('add'), [ AST.IntegerExp(1), AST.IntegerExp(2) ]
-
-
+      AST.get('procedureCall') AST.get('symbol')('add'), [ AST.get('integer')(1), AST.get('integer')(2) ]

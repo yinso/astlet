@@ -10,60 +10,60 @@ describe 'loader test', ->
     ast = loader.load
       type: 'integer'
       value: 1
-    assert.ok ast instanceof AST.IntegerExp
+    assert.ok ast instanceof AST.get('integer')
 
   it 'can load float', ->
     ast = loader.load
       type: 'float'
       value: 1.5
-    assert.ok ast instanceof AST.FloatExp
+    assert.ok ast instanceof AST.get('float')
 
   it 'can load bool', ->
     ast = loader.load
       type: 'boolean'
       value: true
-    assert.ok ast instanceof AST.BoolExp
+    assert.ok ast instanceof AST.get('boolean')
 
   it 'can load string', ->
     ast = loader.load
       type: 'string'
       value: 'this is a string'
-    assert.ok ast instanceof AST.StringExp
+    assert.ok ast instanceof AST.get('string')
 
   it 'can load date', ->
     ast = loader.load
       type: 'date'
       value: new Date()
-    assert.ok ast instanceof AST.DateExp
-  
+    assert.ok ast instanceof AST.get('date')
+
   it 'can load null', ->
     ast = loader.load
       type: 'null'
-    assert.ok ast instanceof AST.NullExp
+    assert.ok ast instanceof AST.get('null')
 
   it 'can load undefined', ->
     ast = loader.load
       type: 'undefined'
-    assert.ok ast instanceof AST.UndefinedExp
+    assert.ok ast instanceof AST.get('undefined')
 
   it 'can load symbol', ->
     ast = loader.load
       type: 'symbol'
       value: 'foo'
-    assert.ok ast instanceof AST.SymbolExp
+    assert.ok ast instanceof AST.get('symbol')
 
   it 'can load regex', ->
     ast = loader.load
       type: 'regex'
       value: /this is regex/
-    assert.ok ast instanceof AST.RegExp
+    assert.ok ast instanceof AST.get('regex')
 
 
   it 'can load parameter', ->
     ast = loader.load
       type: 'parameter'
       name: 'foo'
-    assert.ok ast instanceof AST.ParameterExp
+    assert.ok ast instanceof AST.get('param')
 
   it 'can load array', ->
     ast = loader.load
@@ -78,7 +78,7 @@ describe 'loader test', ->
           value: 10
         }
       ]
-    assert.ok ast instanceof AST.ArrayExp
+    assert.ok ast instanceof AST.get('array')
 
 
   it 'can load object', ->
@@ -100,7 +100,7 @@ describe 'loader test', ->
             pattern:
               type: 'regex'
               value: /\d+/
-    assert.ok ast instanceof AST.ObjectExp
+    assert.ok ast instanceof AST.get('object')
 
   it 'can load member', ->
     ast = loader.load
@@ -111,7 +111,7 @@ describe 'loader test', ->
       key:
         type: 'symbol'
         value: 'bar'
-    assert.ok ast instanceof AST.MemberExp
+    assert.ok ast instanceof AST.get('member')
 
   it 'can load unary', ->
     ast = loader.load
@@ -122,7 +122,7 @@ describe 'loader test', ->
       rhs:
         type: 'symbol'
         value: 'foo'
-    assert.ok ast instanceof AST.UnaryExp
+    assert.ok ast instanceof AST.get('unary')
 
   it 'can load binary', ->
     ast = loader.load
@@ -136,7 +136,7 @@ describe 'loader test', ->
       rhs:
         type: 'symbol'
         value: 'b'
-    assert.ok ast instanceof AST.BinaryExp
+    assert.ok ast instanceof AST.get('binary')
 
   it 'can load if', ->
     ast = loader.load
@@ -150,7 +150,7 @@ describe 'loader test', ->
       else:
         type: 'integer'
         value: 2
-    assert.ok ast instanceof AST.IfExp
+    assert.ok ast instanceof AST.get('if')
 
   it 'can load block', ->
     ast = loader.load
@@ -173,7 +173,7 @@ describe 'loader test', ->
             value: 'bar'
         }
       ]
-    assert.ok ast instanceof AST.BlockExp
+    assert.ok ast instanceof AST.get('block')
 
   it 'can load procedure call', ->
     ast = loader.load
@@ -191,7 +191,7 @@ describe 'loader test', ->
           value: 2
         }
       ]
-    assert.ok ast instanceof AST.ProcedureCallExp
+    assert.ok ast instanceof AST.get('procedureCall')
 
   it 'can load procedure', ->
     ast = loader.load
@@ -220,7 +220,7 @@ describe 'loader test', ->
         rhs:
           type: 'symbol'
           value: 'b'
-    assert.ok ast instanceof AST.ProcedureExp
+    assert.ok ast instanceof AST.get('procedure')
 
   it 'can load define', ->
     ast = loader.load
@@ -231,9 +231,9 @@ describe 'loader test', ->
       value:
         type: 'string'
         value: 'hello'
-    assert.ok ast instanceof AST.DefineExp
+    assert.ok ast instanceof AST.get('define')
 
-  it 'can load define', ->
+  it 'can load assign', ->
     ast = loader.load
       type: 'assign'
       name:
@@ -242,5 +242,4 @@ describe 'loader test', ->
       value:
         type: 'string'
         value: 'hello'
-    assert.ok ast instanceof AST.AssignExp
-
+    assert.ok ast instanceof AST.get('assign')
